@@ -479,7 +479,7 @@ function playbook(p: SnapshotProtocol, capital: number, chain: string): { main: 
   };
   return {
     main: `Deposit $${capital} of USDC into ${name} on ${chain} and keep the position open.`,
-    second: `Add a further $25 after the first week and make one more qualifying action, such as a claim, a vote or a second deposit, in the same wallet.`,
+    second: `Add a further $25 after the first week and repeat the action once more, such as a claim, a vote or a second deposit, in the same wallet.`,
     risk: `Any single-protocol position carries that protocol's contract risk: keep this wallet's exposure to ${name} at the planned capital and no more.`,
   };
 }
@@ -499,13 +499,13 @@ export function farmSteps(p: SnapshotProtocol, age: number | null): FarmStep[] {
   const change = p.change_7d;
   const cadence: FarmStep = change === null
     ? {
-        text: `The snapshot records no seven-day move for ${p.name}, so work on a two-week rhythm: one qualifying action a fortnight until a trend shows.`,
+        text: `The snapshot records no seven-day move for ${p.name}, so work on a two-week rhythm: repeat the main action once a fortnight until a trend shows.`,
         cost: gas,
         time: '10 minutes a fortnight',
       }
     : change >= 0
       ? {
-          text: `${p.name}'s TVL grew ${change.toFixed(1)} per cent in the snapshot's seven days: keep a weekly qualifying action, such as a deposit, a swap or a claim, while it is growing.`,
+          text: `${p.name}'s TVL grew ${change.toFixed(1)} per cent in the snapshot's seven days: repeat the main action weekly, such as a further deposit, a swap or a claim, while it is growing.`,
           cost: gas,
           time: '10 minutes a week',
         }
@@ -524,7 +524,7 @@ export function farmSteps(p: SnapshotProtocol, age: number | null): FarmStep[] {
     { text: book.second, cost: gas, time: '10 minutes' },
     cadence,
     {
-      text: `Hold the position for at least ${hold} days, so the activity spans more than one weekly snapshot of the protocol.`,
+      text: `Hold the position for at least ${hold} days rather than dipping in and out: a round trip inside a week burns the gas twice and leaves nothing in place.`,
       cost: `the $${capital} stays in the position`,
       time: `${hold} days`,
     },
